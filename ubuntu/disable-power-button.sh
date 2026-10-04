@@ -106,7 +106,7 @@
 # └─────────────────────────────────────────────────────────────────────────┘
 #
 # ============================================================================
-# Data di creazione: 2025-07-27 (sessione pi)
+# Data di creazione: $(date +%Y-%m-%d) (sessione pi)
 # Autore: agente pi (pi-coding-agent v1.0.2)
 # Modello sessione corrente: monster-unsloth / unsloth/Qwen3.8-27B-GGUF
 # ============================================================================
