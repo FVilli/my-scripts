@@ -92,13 +92,13 @@ else
     log_ok "NVM già presente in ${NVM_DIR}"
 fi
 
-# NVM ha un bug con set -u: PROVIDED_VERSION viene referenziato senza check
-# Definita vuota ed esportata, copre tutti i sottoprocessi di nvm.sh
-PROVIDED_VERSION=""
-export PROVIDED_VERSION
-
+# NVM ha un bug noto con set -u (nounset): PROVIDED_VERSION viene referenziato
+# senza controllo di esistenza. Disabilitiamo temporaneamente -u per evitare
+# "PROVIDED_VERSION: unbound variable" su nvm.sh >= 0.40.x.
+set +u
 # shellcheck disable=SC1090
 source "${NVM_DIR}/nvm.sh"
+set -u
 
 if ! command -v nvm >/dev/null 2>&1; then
     log_err "NVM non è disponibile dopo l'installazione."
