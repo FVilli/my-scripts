@@ -7,7 +7,7 @@
 # │  PERCHÉ QUESTO SCRIPT ESISTE                                            │
 # ├─────────────────────────────────────────────────────────────────────────┤
 # │                                                                         │
-# │  Su questo server Ubuntu (AMD Ryzen 7 5700U, bare-metal) il pulsante   │
+# │  Su questo server Ubuntu (AMD Ryzen 7 5700U, bare-metal) il pulsante    │
 # │  fisico di alimentazione / standby è gestito da systemd-logind, che     │
 # │  di default esegue "poweroff" quando viene premuto.                     │
 # │                                                                         │
@@ -15,13 +15,13 @@
 # │  provochi uno spegnimento o un suspend/hibernate: il pulsante deve      │
 # │  essere completamente inattivo.                                         │
 # │                                                                         │
-# │  Se si vuole spegnere il server, l'unica via consentita è             │
+# │  Se si vuole spegnere il server, l'unica via consentita è               │
 # │  esplicita e tramite terminale:                                         │
 # │      sudo poweroff                                                      │
 # │      sudo reboot                                                        │
 # │                                                                         │
-# │  Questo script applica la configurazione in modo permanente,           │
-# │  creando un drop-in per systemd-logind che sopravvive anche agli       │
+# │  Questo script applica la configurazione in modo permanente,            │
+# │  creando un drop-in per systemd-logind che sopravvive anche agli        │
 # │  aggiornamenti del pacchetto.                                           │
 # │                                                                         │
 # └─────────────────────────────────────────────────────────────────────────┘
@@ -36,77 +36,77 @@
 # │  • Su qualsiasi server Ubuntu con systemd-logind che gestisce           │
 # │    le chiavi di alimentazione via ACPI.                                 │
 # │                                                                         │
-# │  • Prima o dopo il riavvio: la configurazione persiste grazie al       │
+# │  • Prima o dopo il riavvio: la configurazione persiste grazie al        │
 # │    drop-in in /etc/systemd/logind.conf.d/, quindi basta eseguire        │
 # │    una sola volta per sessione (o prima del primo avvio).               │
 # │                                                                         │
 # └─────────────────────────────────────────────────────────────────────────┘
 #
 # ┌─────────────────────────────────────────────────────────────────────────┐
-# │  DETTAGLI TECNICI                                                      │
+# │  DETTAGLI TECNICI                                                       │
 # ├─────────────────────────────────────────────────────────────────────────┤
 # │                                                                         │
-# │  Hardware: AMD Ryzen 7 5700U con Radeon Graphics                       │
+# │  Hardware: AMD Ryzen 7 5700U con Radeon Graphics                        │
 # │  Virtualizzazione: none (bare-metal)                                    │
 # │  Sistema: Ubuntu (systemd-based)                                        │
 # │                                                                         │
-# │  systemd-logind gestisce i tasti fisici tramite le seguenti            │
-# │  proprietà D-Bus di org.freedesktop.login1.Manager:                    │
+# │  systemd-logind gestisce i tasti fisici tramite le seguenti             │
+# │  proprietà D-Bus di org.freedesktop.login1.Manager:                     │
 # │                                                                         │
-# │    HandlePowerKey   → default "poweroff" (premuto = spegnimento)       │
+# │    HandlePowerKey   → default "poweroff" (premuto = spegnimento)        │
 # │    HandleSuspendKey → default "suspend"                                 │
 # │    HandleHibernateKey → default "hibernate"                             │
-# │    HandleLidSwitch  → default "suspend" (se laptop/mini-PC)            │
+# │    HandleLidSwitch  → default "suspend" (se laptop/mini-PC)             │
 # │                                                                         │
-# │  Lo script imposta tutte a "ignore", creando un drop-in in:           │
-# │    /etc/systemd/logind.conf.d/ignore-power-keys.conf                   │
+# │  Lo script imposta tutte a "ignore", creando un drop-in in:             │
+# │    /etc/systemd/logind.conf.d/ignore-power-keys.conf                    │
 # │                                                                         │
-# │  Il drop-in contiene:                                                  │
+# │  Il drop-in contiene:                                                   │
 # │    [Login]                                                              │
 # │    HandlePowerKey=ignore                                                │
 # │    HandleSuspendKey=ignore                                              │
 # │    HandleHibernateKey=ignore                                            │
 # │    HandleLidSwitch=ignore                                               │
 # │                                                                         │
-# │  Dopo il restart di systemd-logind, la modifica è attiva.             │
-# │  Le chiavi esplicithe (sudo poweroff, sudo reboot) non sono            │
+# │  Dopo il restart di systemd-logind, la modifica è attiva.               │
+# │  Le chiavi esplicithe (sudo poweroff, sudo reboot) non sono             │
 # │  influenzate: logind gestisce solo gli eventi hardware.                 │
 # │                                                                         │
 # └─────────────────────────────────────────────────────────────────────────┘
 #
 # ┌─────────────────────────────────────────────────────────────────────────┐
-# │  CHI HA SCRITTO QUESTO SCRIPT                                          │
-# ├────────────────────────────────═════════════════════════════════════════┤
+# │  CHI HA SCRITTO QUESTO SCRIPT                                           │
+# ├─────────────────────────────────────────────────────────────────────────┤
 # │                                                                         │
 # │  Questo script è stato generato durante una sessione di                 │
 # │  configurazione del server Ubuntu con l'agente pi (pi-coding-agent      │
 # │  v1.0.2, https://github.com/earendil-works/pi-coding-agent).            │
 # │                                                                         │
 # │  Modello utilizzato nella sessione:                                     │
-# │    • Predefinito attuale: monster-unsloth / unsloth/Qwen3.8-27B-GGUF   │
-# │    • Provider locale: http://monster.local:8888/v1                     │
-# │    • Modello Cloud (sessione): openai-codex / gpt-5.6-luna             │
+# │    • Predefinito attuale: monster-unsloth / unsloth/Qwen3.8-27B-GGUF    │
+# │    • Provider locale: http://monster.local:8888/v1                      │
+# │    • Modello Cloud (sessione): openai-codex / gpt-5.6-luna              │
 # │                                                                         │
-# │  L'agente pi è un coding agent che opera in modalità TUI/RPC,          │
+# │  L'agente pi è un coding agent che opera in modalità TUI/RPC,           │
 # │  con accesso a tool bash, read/write/edit su file, e integrazione       │
 # │  con provider LLM multipli.                                             │
 # │                                                                         │
 # └─────────────────────────────────────────────────────────────────────────┘
 #
 # ┌─────────────────────────────────────────────────────────────────────────┐
-# │  AVVERTENZE                                                           │
+# │  AVVERTENZE                                                             │
 # ├─────────────────────────────────────────────────────────────────────────┤
 # │                                                                         │
-# │  ⚠️  Il restart di systemd-logind chiude le sessioni utente attive,    │
-# │     incluse le connessioni SSH. Se lo esegui da remoto, ricollegati    │
+# │  ⚠️  Il restart di systemd-logind chiude le sessioni utente attive,      │
+# │     incluse le connessioni SSH. Se lo esegui da remoto, ricollegati     │
 # │     dopo il completamento.                                              │
 # │                                                                         │
-# │  ⚠️  Verifica sempre con "busctl get-property ..." dopo l'esecuzione.   │
+# │  ⚠️  Verifica sempre con "busctl get-property ..." dopo l'esecuzione.    │
 # │                                                                         │
 # └─────────────────────────────────────────────────────────────────────────┘
 #
 # ============================================================================
-# Data di creazione: $(date +%Y-%m-%d) (sessione pi)
+# Data di creazione: 2025-10-04 (sessione pi)
 # Autore: agente pi (pi-coding-agent v1.0.2)
 # Modello sessione corrente: monster-unsloth / unsloth/Qwen3.8-27B-GGUF
 # ============================================================================
