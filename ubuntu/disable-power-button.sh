@@ -97,11 +97,11 @@
 # │  AVVERTENZE                                                             │
 # ├─────────────────────────────────────────────────────────────────────────┤
 # │                                                                         │
-# │  ⚠️  Il restart di systemd-logind chiude le sessioni utente attive,      │
+# │  ⚠️     Il restart di systemd-logind chiude le sessioni utente attive,  │
 # │     incluse le connessioni SSH. Se lo esegui da remoto, ricollegati     │
 # │     dopo il completamento.                                              │
 # │                                                                         │
-# │  ⚠️  Verifica sempre con "busctl get-property ..." dopo l'esecuzione.    │
+# │  ⚠️     Verifica sempre con "busctl get-property ..." dopo l'esecuzione.│
 # │                                                                         │
 # └─────────────────────────────────────────────────────────────────────────┘
 #
