@@ -92,6 +92,11 @@ else
     log_ok "NVM già presente in ${NVM_DIR}"
 fi
 
+# NVM ha un bug con set -u: PROVIDED_VERSION viene referenziato senza check
+# Definita vuota ed esportata, copre tutti i sottoprocessi di nvm.sh
+PROVIDED_VERSION=""
+export PROVIDED_VERSION
+
 # shellcheck disable=SC1090
 source "${NVM_DIR}/nvm.sh"
 
@@ -101,8 +106,6 @@ if ! command -v nvm >/dev/null 2>&1; then
 fi
 
 # --- 2. Installa e seleziona Node.js LTS ---
-# PROVIDED_VERSION deve essere definito per evitare "unbound variable" in nvm.sh con set -u
-PROVIDED_VERSION=""
 log_warn "Installazione/selezione dell'ultima versione LTS di Node.js ..."
 nvm install --lts
 nvm alias default 'lts/*' >/dev/null
