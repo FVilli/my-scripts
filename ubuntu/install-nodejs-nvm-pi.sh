@@ -101,6 +101,8 @@ if ! command -v nvm >/dev/null 2>&1; then
 fi
 
 # --- 2. Installa e seleziona Node.js LTS ---
+# PROVIDED_VERSION deve essere definito per evitare "unbound variable" in nvm.sh con set -u
+PROVIDED_VERSION=""
 log_warn "Installazione/selezione dell'ultima versione LTS di Node.js ..."
 nvm install --lts
 nvm alias default 'lts/*' >/dev/null
