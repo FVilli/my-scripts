@@ -1,4 +1,3 @@
-#!/usr/bin/env bash
 # ============================================================================
 # install-nodejs-nvm-pi.sh
 # ============================================================================
@@ -46,7 +45,9 @@
 #
 # ============================================================================
 
-set -euo pipefail
+#!/usr/bin/env bash
+
+set -eo pipefail
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -83,7 +84,7 @@ printf ' Installazione Node.js tramite NVM e pi\n'
 printf ' Utente: %s\n' "${USER:-$(id -un)}"
 printf '============================================================\n\n'
 
-# --- NVM ---
+# --- 1. Installa NVM se necessario ---
 if [[ ! -s "${NVM_DIR}/nvm.sh" ]]; then
     log_warn "NVM non trovato: installazione ${NVM_VERSION}..."
     curl -fsSL "${NVM_INSTALL_URL}" | bash
@@ -92,18 +93,18 @@ else
     log_ok "NVM già presente in ${NVM_DIR}"
 fi
 
-set +u
+# --- 2. Carica NVM nella shell corrente dello script ---
 # shellcheck disable=SC1090
 source "${NVM_DIR}/nvm.sh"
-set -u
 
 if ! declare -F nvm >/dev/null 2>&1; then
     log_err "NVM non è disponibile dopo l'installazione."
     exit 1
 fi
 
-# --- Node.js LTS ---
+# --- 3. Installa/seleziona Node.js LTS ---
 log_warn "Installazione/selezione Node.js LTS..."
+
 nvm install --lts
 nvm alias default 'lts/*' >/dev/null
 nvm use --lts >/dev/null
@@ -111,27 +112,39 @@ nvm use --lts >/dev/null
 log_ok "Node.js $(node --version)"
 log_ok "npm $(npm --version)"
 
-# --- Pi ---
-log_warn "Installazione ${PI_PACKAGE}..."
+# --- 4. Installa Pi ---
+log_warn "Installazione globale di ${PI_PACKAGE}..."
+
 npm install --global "${PI_PACKAGE}"
 
-# --- Verifica ---
+# --- 5. Verifica ---
 if ! command -v pi >/dev/null 2>&1; then
-    log_err "Il comando 'pi' non è disponibile."
+    log_err "Il comando 'pi' non è disponibile nel PATH."
     exit 1
 fi
 
 log_ok "pi installato in: $(command -v pi)"
 
-pi --version 2>/dev/null || true
+if pi --version >/dev/null 2>&1; then
+    log_ok "pi versione $(pi --version)"
+else
+    log_warn "pi installato, ma impossibile leggere la versione."
+fi
 
 echo
 echo "============================================================"
-echo " Installazione completata."
+echo " Installazione completata"
 echo "============================================================"
 echo
 echo "Node: $(node --version)"
 echo "npm:  $(npm --version)"
-echo "pi:   $(command -v pi)"
-echo "Se una shell già aperta non trova nvm/pi, esegui:"
-echo "  source ~/.bashrc"
+echo "pi:   $(pi --version 2>/dev/null || echo 'installato')"
+echo
+echo "IMPORTANTE:"
+echo "Per rendere NVM, Node.js e pi disponibili normalmente nella tua sessione,"
+echo "esci dalla sessione SSH e ricollegati:"
+echo
+echo "  exit"
+echo
+echo "poi riconnettiti al server."
+echo
