@@ -12,6 +12,15 @@ Opzioni: `--user NOME`, `--no-group`, `-h`.
 curl -fsSL https://raw.githubusercontent.com/FVilli/my-scripts/main/ubuntu/install-docker.sh | sudo sh
 ```
 
+## avahi:ubuntu
+
+Per rendere il server raggiungibile come `<hostname>.local` e scoprire i servizi mDNS in LAN.
+Opzioni: `--no-firewall`, `-h`.
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/FVilli/my-scripts/main/ubuntu/install-avahi.sh | sudo sh
+```
+
 ## nodejs-nvm-pi:ubuntu
 
 Per installare NVM, Node.js LTS e il coding agent `pi` globalmente. Non usare sudo.
