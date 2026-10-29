@@ -1,76 +1,30 @@
 # my-scripts
 
-Libreria personale di script per automazioni sysadmin. Piattaforma corrente: Ubuntu (AMD Ryzen 7 5700U bare-metal), ma non limitato — spazio per PowerShell su Windows e altro.
+Raccolta personale di script sysadmin. Ogni script è autodocumentato: l'header ASCII
+in testa al file spiega *perché esiste, quando usarlo, parametri, avvertenze*.
 
-## Struttura
+## docker:ubuntu
 
-```
-ubuntu/            ← script Ubuntu
-├── disable-power-button.sh
-├── install-docker.sh
-└── install-nodejs-nvm-pi.sh
-```
-
-Pianificato: `windows/` con PowerShell.
-
-## Installazione Docker Engine
-
-Installa `docker-ce`, `docker-ce-cli`, `containerd.io`, `docker-buildx-plugin` e
-`docker-compose-plugin` dal repository APT ufficiale di Docker (niente snap, niente
-script `get.docker.com`). Configura chiave GPG, repo, abilita il servizio systemd e
-aggiunge l'utente al gruppo `docker`. Rieseguibile senza toccare container e immagini.
-Rimuove gli eventuali pacchetti in conflitto (`docker.io`, `containerd`, `runc`, ...).
-
-Parametri:
-
-- `--user NOME` — utente da aggiungere al gruppo `docker` (default: chi ha lanciato `sudo`)
-- `--no-group` — non modificare l'appartenenza al gruppo `docker`
-- `-h`, `--help` — aiuto
-
-Uso rapido:
+Per installare Docker Engine + buildx/compose dal repo APT ufficiale.
+Opzioni: `--user NOME`, `--no-group`, `-h`.
 
 ```sh
 curl -fsSL https://raw.githubusercontent.com/FVilli/my-scripts/main/ubuntu/install-docker.sh | sudo sh
 ```
 
-## Node.js + NVM + pi
+## nodejs-nvm-pi:ubuntu
 
-Installa NVM (`~/.nvm`), l'ultima Node.js LTS e il coding agent `pi`
-(`@earendil-works/pi-coding-agent`) globalmente via npm. Da eseguire come utente
-normale, **non** con sudo. Dopo l'esecuzione serve un nuovo login (o `source ~/.bashrc`)
-per avere `nvm` e `pi` nel PATH.
-
-Parametri: nessuno (variabili opzionali: `NVM_VERSION`, `NVM_DIR`, `PI_PACKAGE`).
-
-Uso rapido:
+Per installare NVM, Node.js LTS e il coding agent `pi` globalmente. Non usare sudo.
 
 ```sh
 curl -fsSL https://raw.githubusercontent.com/FVilli/my-scripts/main/ubuntu/install-nodejs-nvm-pi.sh | sh
 ```
 
-## Disabilita pulsante di alimentazione
+## disable-power-button:ubuntu
 
-Imposta a `ignore` le azioni di systemd-logind per i tasti fisici di alimentazione,
-sospensione, ibernazione e coperchio (`HandlePowerKey`, `HandleSuspendKey`,
-`HandleHibernateKey`, `HandleLidSwitch`), tramite drop-in permanente in
-`/etc/systemd/logind.conf.d/`. Spegnimento solo esplicito con `sudo poweroff`.
-
-Parametri: nessuno. Richiede root. **Attenzione:** il restart di `systemd-logind`
-chiude le sessioni SSH attive — ricollegati dopo.
-
-Uso rapido:
+Per rendere inattivo il pulsante fisico di alimentazione (spegni solo con `sudo poweroff`).
+Chiude le sessioni SSH attive: ricollegati dopo.
 
 ```sh
 curl -fsSL https://raw.githubusercontent.com/FVilli/my-scripts/main/ubuntu/disable-power-button.sh | sudo sh
 ```
-
-## Regole
-
-- Ogni script deve avere un **header ASCII descrittivo** in cima (perché, quando, come)
-- L'**INDEX.md** tiene l'indice leggero — la documentazione estesa resta nello script
-
-## Note
-
-- Script autonomi, nessuna dipendenza esterna non di base
-- Documentazione principale negli header ASCII di ogni script
-- Nessun test, CI o build system — sono script da lanciare e dimenticare
